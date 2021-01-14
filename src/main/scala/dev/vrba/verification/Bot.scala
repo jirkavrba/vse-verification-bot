@@ -1,9 +1,7 @@
 package dev.vrba.verification
 
-import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
-import io.circe.syntax._
 import net.dv8tion.jda.api.JDABuilder
 
 import java.io.File
@@ -12,12 +10,12 @@ import scala.io.Source
 object Bot {
   def main(args: Array[String]): Unit = {
     loadConfigurationFromJson() match {
-      case Some(configuration) => {
+      case Some(configuration) =>
         JDABuilder.createDefault(configuration.discordToken)
           .addEventListeners(new VerificationListener(configuration))
           .build()
           .awaitReady()
-      }
+
       case None => println(
         """Invalid bot configuration!
           |
