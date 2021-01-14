@@ -24,12 +24,14 @@ class VerificationService(private val portalToken: String) {
     request.send(backend) match {
       case Response(body, code, _, _, _, _) =>
         code match {
+          case StatusCode.Ok => Success
           // Invalid token
           case StatusCode.UnprocessableEntity => handleUnprocessableEntity(body, userId)
           // Invalid verification code
           case StatusCode.NotFound => Failure("Verification code cannot be found in the server database.")
           // Invalid portal API token
           case StatusCode.Unauthorized => Failure("Missing or invalid API token for portal authorization.")
+          case _ => Failure("Unexpected return code")
         }
 
       case _ => Failure("Cannot fetch portal API. Something might have gone wrong at server side.")
