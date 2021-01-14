@@ -1,7 +1,11 @@
 package dev.vrba.verification
 
 
-case class GuildConfiguration(guildId: Long, channelId: Long)
+case class GuildConfiguration(
+   guildId: Long,
+   channelId: Long,
+   verifiedRoleId: Long
+)
 
 case class Configuration(
   discordToken: String,
