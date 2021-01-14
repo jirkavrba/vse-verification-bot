@@ -13,7 +13,8 @@ object Bot {
   def main(args: Array[String]): Unit = {
     loadConfigurationFromJson() match {
       case Some(configuration) => {
-        val client = JDABuilder.createDefault(configuration.discordToken)
+        JDABuilder.createDefault(configuration.discordToken)
+          .addEventListeners(new VerificationListener(configuration))
           .build()
           .awaitReady()
       }
