@@ -1,11 +1,41 @@
 package dev.vrba.verification
 
+import io.circe._
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
 import net.dv8tion.jda.api.JDABuilder
+
+import java.io.File
+import scala.io.Source
 
 object Bot {
   def main(args: Array[String]): Unit = {
-    val client = JDABuilder.createDefault("token")
-      .build()
-      .awaitReady()
+    loadConfigurationFromJson() match {
+      case Some(configuration) => {
+        val client = JDABuilder.createDefault(configuration.discordToken)
+          .build()
+          .awaitReady()
+      }
+      case None => println(
+        """Invalid bot configuration!
+          |
+          |Please make sure the file config.json exists in application runtime folder and
+          |all values are filled correctly according to README.
+          |""".stripMargin)
+    }
+  }
+
+  private def loadConfigurationFromJson(): Option[Configuration] = {
+    try {
+      val source = Source.fromFile(new File("./config.json").getAbsolutePath)
+      decode[Configuration](source.mkString) match {
+        case Left(_) => None
+        case Right(configuration) => Some(configuration)
+      }
+    }
+    catch {
+      case _: Throwable => None
+    }
   }
 }
