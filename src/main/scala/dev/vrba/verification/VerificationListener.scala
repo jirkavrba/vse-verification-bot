@@ -33,7 +33,8 @@ class VerificationListener(private val configuration: Configuration) extends Lis
   private def verify(code: String, event: GuildMessageReceivedEvent): Unit = {
     event.getMessage.delete().queue()
 
-    val verified = service.verify(code)
+    val verified = service.verify(code, event.getAuthor.getIdLong)
+
     val embed = new EmbedBuilder()
       .setAuthor(event.getAuthor.getName, null, event.getAuthor.getAvatarUrl)
       .setTimestamp(event.getMessage.getTimeCreated)
