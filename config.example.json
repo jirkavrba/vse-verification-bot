@@ -4,7 +4,8 @@
   "guilds": [
     {
       "guildId": 0,
-      "channelId": 0
+      "channelId": 0,
+      "verifiedRoleId": 0
     }
   ]
 }
