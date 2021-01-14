@@ -54,7 +54,11 @@ class VerificationListener(private val configuration: Configuration) extends Lis
         embed.addField("Failure reason:", s"`$reason`", false)
     }
 
-    event.getChannel.sendMessage(embed.build()).queue()
+    event.getAuthor
+        .openPrivateChannel()
+        .complete()
+        .sendMessage(embed.build())
+        .queue()
   }
 
   private def assignVerifiedRoleToUser(event: GuildMessageReceivedEvent): Unit = {
