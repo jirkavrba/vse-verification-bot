@@ -1,5 +1,10 @@
 {
   "discordToken": "",
   "portalApiKey": "",
-  "guilds": []
+  "guilds": [
+    {
+      "guildId": 0,
+      "channelId": 0
+    }
+  ]
 }
