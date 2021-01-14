@@ -18,7 +18,7 @@ class VerificationService(private val portalToken: String) {
   def verify(code: String, userId: Long): VerificationResult = {
     val request = basicRequest
       .header("Accept", "application/json")
-      .body(Map("api_token" -> portalToken))
+      .header("X-Api-Token", portalToken)
       .post(uri"$portalUrl/api/discord/complete_verification/$code/$userId")
 
     request.send(backend) match {
@@ -28,6 +28,8 @@ class VerificationService(private val portalToken: String) {
           case StatusCode.UnprocessableEntity => handleUnprocessableEntity(body, userId)
           // Invalid verification code
           case StatusCode.NotFound => Failure("Verification code cannot be found in the server database.")
+          // Invalid portal API token
+          case StatusCode.Unauthorized => Failure("Missing or invalid API token for portal authorization.")
         }
 
       case _ => Failure("Cannot fetch portal API. Something might have gone wrong at server side.")
@@ -54,7 +56,8 @@ class VerificationService(private val portalToken: String) {
   private def repeatedlyVerifyUser(userId: Long): VerificationResult = {
     val request = basicRequest
       .header("Accept", "application/json")
-      .get(uri"$portalUrl/api/discord/check_verification/$userId?api_token=$portalToken")
+      .header("X-Api-Token", portalToken)
+      .get(uri"$portalUrl/api/discord/check_verification/$userId")
 
     request.send(backend) match {
       case Response(_, code, _, _, _, _) => code match {
