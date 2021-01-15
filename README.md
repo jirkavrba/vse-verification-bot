@@ -2,6 +2,8 @@
 
 Poskytuje ověření uživatelů jejich VŠE účtem na [Studentském portálu FIS VŠE](https://portal.fis-vse.cz)
 
+[![Discord invite](https://discord.com/api/guilds/760863954607669269/embed.png?style=banner2)](https://discord.gg/yZMhTVQdkX)
+
 ---
 
 Pokud jste správcem některého z VŠE serverů a chcete přidat verifikaci, otevřete prosím issue [zde](https://github.com/jirkavrba/vse-verification-bot) a napište vaše Discord username#tag.
