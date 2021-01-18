@@ -43,6 +43,7 @@ class VerificationListener(private val configuration: Configuration) extends Lis
       case Success =>
         embed.setColor(new Color(0x28a745))
         embed.setTitle("Verifikace proběhla úspěšně.")
+        embed.setImage("https://i.imgur.com/aDwGFLr.jpg")
         embed.setDescription("Během chvíle ti bude odemknut plný přístup na server.")
 
         assignVerifiedRoleToUser(event)
