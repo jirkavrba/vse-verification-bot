@@ -3,7 +3,8 @@ package dev.vrba.verification
 
 case class GuildConfiguration(
    guildId: Long,
-   channelId: Long,
+   verificationChannelId: Long,
+   logChannelId: Long,
    verifiedRoleId: Long
 )
 

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 import java.awt.Color
+import java.util.logging.Logger
 
 class VerificationListener(private val configuration: Configuration) extends ListenerAdapter {
 
@@ -25,7 +26,7 @@ class VerificationListener(private val configuration: Configuration) extends Lis
   private def isInVerificationChannel(event: GuildMessageReceivedEvent): Boolean =
     configuration.guilds
       .find(event.getGuild.getIdLong == _.guildId) match {
-      case Some(guild) => event.getChannel.getIdLong == guild.channelId
+      case Some(guild) => event.getChannel.getIdLong == guild.verificationChannelId
       case None => false
     }
 
@@ -55,10 +56,12 @@ class VerificationListener(private val configuration: Configuration) extends Lis
     }
 
     event.getAuthor
-        .openPrivateChannel()
-        .complete()
-        .sendMessage(embed.build())
-        .queue()
+      .openPrivateChannel()
+      .complete()
+      .sendMessage(embed.build())
+      .queue()
+
+    log(result, event)
   }
 
   private def assignVerifiedRoleToUser(event: GuildMessageReceivedEvent): Unit = {
@@ -70,5 +73,39 @@ class VerificationListener(private val configuration: Configuration) extends Lis
     val role = guild.getRoleById(guildConfiguration.verifiedRoleId)
 
     guild.addRoleToMember(member, role).queue()
+  }
+
+  private def log(result: VerificationResult, event: GuildMessageReceivedEvent): Unit = {
+    val guild = event.getGuild
+    val guildConfiguration = configuration.guilds.find(_.guildId == guild.getIdLong).get
+
+
+    Option(guild.getTextChannelById(guildConfiguration.logChannelId)) match {
+      case Some(channel) =>
+        val embed = new EmbedBuilder()
+        val author = event.getAuthor
+
+        embed.setAuthor(author.getName, null, author.getAvatarUrl)
+        embed.setTimestamp(event.getMessage.getTimeCreated)
+        embed.addField("Discord ID", author.getId, false)
+        embed.addField("Mention", author.getAsMention, false)
+
+        result match {
+          case Success =>
+            embed.setTitle("Verification successful")
+            embed.setColor(new Color(0x28a745))
+
+          case Failure(reason) =>
+            embed.setTitle("Verification failed")
+            embed.setColor(new Color(0xdc3545))
+            embed.addField("Error", s"`$reason`", false)
+        }
+
+        channel.sendMessage(embed.build()).queue()
+
+      case None => Logger
+        .getAnonymousLogger
+        .severe(s"Cannot find verification log channel for guild ${guild.getName}")
+    }
   }
 }
