@@ -3,6 +3,7 @@ package dev.vrba.verification
 import io.circe.generic.auto._
 import io.circe.parser._
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.entities.Activity
 
 import java.io.File
 import scala.io.Source
@@ -15,6 +16,7 @@ object Bot {
           .addEventListeners(new VerificationListener(configuration))
           .build()
           .awaitReady()
+          .getPresence.setActivity(Activity.playing("Verifying VŠE lads like a Chad"))
 
       case None => println(
         """Invalid bot configuration!
