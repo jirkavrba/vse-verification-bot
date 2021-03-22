@@ -6,7 +6,7 @@ scalaVersion := "2.13.4"
 
 resolvers += JCenterRepository
 
-libraryDependencies += "net.dv8tion" % "JDA" % "4.2.0_227"
+libraryDependencies += "net.dv8tion" % "JDA" % "4.2.0_245"
 libraryDependencies += "com.softwaremill.sttp.client3" %% "core" % "3.0.0"
 
 val circeVersion = "0.12.3"
