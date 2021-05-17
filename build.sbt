@@ -2,7 +2,7 @@ name := "vse-verification-bot"
 
 version := "0.1"
 
-scalaVersion := "2.13.4"
+scalaVersion := "2.13.6"
 
 resolvers += JCenterRepository
 
