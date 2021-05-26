@@ -9,7 +9,7 @@ resolvers += JCenterRepository
 libraryDependencies += "net.dv8tion" % "JDA" % "4.2.0_227"
 libraryDependencies += "com.softwaremill.sttp.client3" %% "core" % "3.0.0"
 
-val circeVersion = "0.12.3"
+val circeVersion = "0.14.0"
 
 libraryDependencies ++= Seq(
   "io.circe" %% "circe-core",
